@@ -151,7 +151,39 @@ public class Practice {
    * @return true if there is a two-way connection between v1 and v2, false otherwise
    */
   public static <T> boolean twoWay(Vertex<T> v1, Vertex<T> v2) {
-    return false;
+    if (v1 == null || v2 == null) {
+      return false;
+    }
+
+    return canReach(v1, v2) && canReach(v2, v1);
+
+    private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
+      if (start == target) {
+        return true;
+      }
+
+      Set<Vertex<T>> visited = new HashSet<>();
+      List<Vertex<T>> queue = new ArrayList<>();
+
+      queue.add(start);
+      visited.add(start);
+
+      while (!queue.isEmpty()) {
+        Vertex<T> current = queue.remove(0);
+
+        if (current == target) {
+          return true;
+        }
+
+        for (Vertex<T> neighbor : current.neighbors) {
+          if (!visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+      return false;
+    }
   }
 
   /**
