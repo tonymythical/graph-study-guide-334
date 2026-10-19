@@ -70,7 +70,30 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (starting == null) {
+      return result;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    List<Vertex<Integer>> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove(0);
+      result.add(current.data);
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -84,7 +107,33 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    return null;
+    List<Integer> result = new ArrayList<>();
+    if (graph == null || !graph.containsKey(starting)) {
+      return result;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    List<Integer> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.remove(0);
+      result.add(current);
+
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors != null) {
+        for (int neighbor : neighbors) {
+          if (!visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
 
   /**
