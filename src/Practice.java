@@ -199,6 +199,42 @@ public class Practice {
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
+    if (graph == null || starting <= 0 || ending <= 0) {
+      return false;
+    }
+
+    if (!graph.containsKey(starting) || !graph.containsKey(ending)) {
+      return false;
+    }
+
+    if (starting == ending) {
+      return true;
+    }
+
+    Set<Integer> visited = new HashSet<>();
+    List<Integer> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      int current = queue.remove(0);
+
+      if (current == ending) {
+        return true;
+      }
+
+      Set<Integer> neighbors = graph.get(current);
+      if (neighbors != null) {
+        for (int neighbor : neighbors) {
+          if (neighbor > 0 && !visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+    }
+
     return false;
   }
 
@@ -212,6 +248,30 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    if (person == null) {
+      return false;
+    }
+
+    Set<Professional> visited = new HashSet<>();
+    List<Professional> queue = new ArrayList<>();
+
+    queue.add(person);
+    visited.add(person);
+
+    while (!queue.isEmpty()) {
+      Professional current = queue.remove(0);
+
+      if (current.getCompany() != null && current.getCompany().equals(companyName)) {
+        return true;
+      }
+
+      for (Professional connection : current.getConnections()) {
+        if (connection != null && !visited.contains(connection)) {
+          visited.add(connection);
+          queue.add(connection);
+        }
+      }
+    }
     return false;
   }
 
