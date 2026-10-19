@@ -25,7 +25,30 @@ public class Practice {
    * @return the number of vertices with odd values reachable from the starting vertex
    */
   public static int oddVertices(Vertex<Integer> starting) {
-    return 0;
+    if (starting == null) {
+      return 0;
+    }
+
+    int count = 0;
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    List<Vertex<Integer>> queue = new ArrayList<>();
+
+    queue.add(starting);
+    visited.add(starting);
+
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.remove(0);
+      if (current.data % 2 != 0) {
+        count++;
+      }
+      for (Vertex<Integer> neighbor : current.getNeighbors()) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
   }
 
   /**
