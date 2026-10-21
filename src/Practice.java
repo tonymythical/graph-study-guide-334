@@ -1,6 +1,4 @@
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Practice {
 
@@ -29,25 +27,28 @@ public class Practice {
       return 0;
     }
 
-    int count = 0;
     Set<Vertex<Integer>> visited = new HashSet<>();
-    List<Vertex<Integer>> queue = new ArrayList<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
 
-    queue.add(starting);
     visited.add(starting);
+    queue.add(starting);
 
-    while (!queue.isEmpty()) {
-      Vertex<Integer> current = queue.remove(0);
+    int count = 0;
+
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
       if (current.data % 2 != 0) {
         count++;
       }
-      for (Vertex<Integer> neighbor : current.getNeighbors()) {
+
+      for (Vertex<Integer> neighbor : current.neighbors) {
         if (!visited.contains(neighbor)) {
           visited.add(neighbor);
           queue.add(neighbor);
         }
       }
     }
+
     return count;
   }
 
@@ -74,24 +75,20 @@ public class Practice {
     if (starting == null) {
       return result;
     }
-
     Set<Vertex<Integer>> visited = new HashSet<>();
-    List<Vertex<Integer>> queue = new ArrayList<>();
-
-    queue.add(starting);
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
     visited.add(starting);
-
-    while (!queue.isEmpty()) {
-      Vertex<Integer> current = queue.remove(0);
+    queue.add(starting);
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
       result.add(current.data);
-      for (Vertex<Integer> neighbor : current.neighbors) {
-        if (!visited.contains(neighbor)) {
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
           visited.add(neighbor);
           queue.add(neighbor);
         }
       }
     }
-
     Collections.sort(result);
     return result;
   }
@@ -156,6 +153,7 @@ public class Practice {
     }
 
     return canReach(v1, v2) && canReach(v2, v1);
+  }
 
     private static <T> boolean canReach(Vertex<T> start, Vertex<T> target) {
       if (start == target) {
@@ -183,7 +181,6 @@ public class Practice {
         }
       }
       return false;
-    }
   }
 
   /**
@@ -361,5 +358,133 @@ public class Practice {
     }
     
     return validMoves;
+  }
+
+  public static int largestReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return Integer.MIN_VALUE;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+
+    int max = starting.data;
+
+    while(!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      if (current.data > max) {
+        max = current.data;
+      }
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }    
+    return max;
+  }
+
+  public static int minReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return Integer.MAX_VALUE;
+    }
+
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+
+    visited.add(starting);
+    queue.add(starting);
+
+    int min = starting.data;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      if (current.data < min) {
+        min = current.data;
+      }
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return min;
+  }
+
+  public static int sumReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+    int sum = 0;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      sum += current.data;
+      for(Vertex<Integer> neighbor : current.neighbors) {
+        if(!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return sum;
+  }
+
+  public static int countReachable(Vertex<Integer> starting) {
+    if (starting == null) {
+      return 0;
+    }
+    Set<Vertex<Integer>> visited = new HashSet<>();
+    Queue<Vertex<Integer>> queue = new LinkedList<>();
+    visited.add(starting);
+    queue.add(starting);
+    int count = 0;
+    while (!queue.isEmpty()) {
+      Vertex<Integer> current = queue.poll();
+      count++;
+      for (Vertex<Integer> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          queue.add(neighbor);
+        }
+      }
+    }
+    return count;
+  }
+  
+  public static <T> boolean dfsCanReach(Vertex<T> start, Vertex<T> target) {
+    if (start == null || target == null) {
+      return false;
+    }
+    if (start == target) {
+      return true;
+    }
+
+    Set<Vertex<T>> visited = new HashSet<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+
+    visited.add(start);
+    stack.push(start);
+
+    while(!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+
+      if (current == target) {
+        return true;
+      }
+
+      for (Vertex<T> neighbor : current.neighbors) {
+        if (!visited.contains(neighbor)) {
+          visited.add(neighbor);
+          stack.push(neighbor);
+        }
+      }
+    }
+    return false;
   }
 }
